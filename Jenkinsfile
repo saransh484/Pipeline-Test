@@ -30,6 +30,7 @@ pipeline{
 
     stage("Push To Registry"){
       steps{
+        sh 'docker -v'
         sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
         sh 'docker push registry.deploy.flipr.co.in/test-image:latest'
       }
