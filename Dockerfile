@@ -1,3 +1,3 @@
-FROM alipine:16
+FROM alpine:latest
 WORKDIR /app
 RUN "echo 'hehe'"
