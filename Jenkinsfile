@@ -25,7 +25,7 @@ pipeline{
 
     stage("Build"){
       steps{
-        sh 'docker build -t test-image:latest .'
+        sh 'docker build -t registry.deploy.flipr.co.in/test-image:latest .'
       }
     }
 
