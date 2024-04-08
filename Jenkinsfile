@@ -70,8 +70,8 @@ pipeline {
                                      -H 'Content-Type: application/json' \
                                      -d '{"Username":"${PORTAINER_USR}", "Password":"${PORTAINER_PSW}"}'
                                 """, returnStdout: true).trim()
-                echo "Response: ${response.jwt}"
-                def jwtObj = new groovy.json.JsonSlurper().parseText(response)
+                echo "Response: ${response}"
+                def jwtObj = new groovy.json.JsonSlurper().parseText(response.getContent())
                 echo "${jwtObj}"
                 }
             }
