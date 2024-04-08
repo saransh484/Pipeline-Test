@@ -9,6 +9,9 @@
 
     stages {
         stage('Initialize') {
+          when{
+                expression { return current_status == "opened" && merged == false }
+            }
             steps {
                 script {
                     def extractedNumber = (title =~ /\d+/).find() ? (title =~ /\d+/).find()[0] : "No number found"
