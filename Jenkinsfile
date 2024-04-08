@@ -65,7 +65,7 @@ pipeline {
             steps {
                 sh """
                     curl -X POST \
-                         https://13.201.67.58:55420/api/auth \
+                         https://portainer.deploy.flipr.co.in/api/auth \
                          -H 'Content-Type: application/json' \
                          -d '{"Username":"${PORTAINER_USR}", "Password":"${PORTAINER_PSW}"}'
                 """
