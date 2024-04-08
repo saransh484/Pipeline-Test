@@ -1,4 +1,4 @@
-if ( current_status == "opened"){
+// if ( current_status == "opened"){
   
   pipeline {
     agent any
@@ -14,7 +14,7 @@ if ( current_status == "opened"){
             }
             steps {
                 script {
-                    def extractedNumber = (title =~ /\d+/).find() ? (title =~ /\d+/).find()[0] : "No number found"
+                    def extractedNumber = (branch =~ /\d+/).find() ? (branch =~ /\d+/).find()[0] : "No number found"
                     echo "${current_status}"
                     echo "${merged}"
                     echo "${extractedNumber}"
@@ -23,18 +23,27 @@ if ( current_status == "opened"){
         }
 
         stage("Checkout") {
+          when{
+                expression { return current_status == "opened"}
+            }
             steps {
                 checkout scm
             }
         }
 
         stage("Build") {
+          when{
+                expression { return current_status == "opened"}
+            }
             steps {
                 sh 'docker build -t registry.deploy.flipr.co.in/test-image:latest .'
             }
         }
 
         stage("Push To Registry") {
+          when{
+                expression { return current_status == "opened"}
+            }
             steps {
                 sh 'docker -v'
                 sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
@@ -44,4 +53,4 @@ if ( current_status == "opened"){
     }
 }
 
-}
+// }
