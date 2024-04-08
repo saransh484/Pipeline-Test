@@ -117,7 +117,7 @@ pipeline {
             steps {
                 script{
                     def response = sh(script: """
-                                curl -X GET \
+                                curl -X POST \
                                      -H "Authorization: Bearer ${env.JWT}" \
                                      -H "Content-Type: application/json" \
                                      --data  '{ "name": "deploy", "stackFileContent": "version: '3.1'\nservices:\n   webserver:\n     image: nginx:alpine\n     container_name: webserver"}' \
