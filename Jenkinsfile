@@ -10,7 +10,7 @@
     stages {
         stage('Initialize') {
           when{
-                expression { return current_status == "opened" && merged == false }
+                expression { return current_status == "opened"}
             }
             steps {
                 script {
