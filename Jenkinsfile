@@ -89,8 +89,16 @@ pipeline {
                                 """, 
                                       returnStdout: true).trim()
                 // echo "Response: ${response}"
+                String existingStackId = ""
                 def jsonObj = readJSON text: response
                 echo "${jsonObj}"
+                    jsonObj.each { stack ->
+                      if(stack.Name == "deploy") {
+                        existingStackId = stack.Id
+                      }
+                    }
+                env.SID = existingStackId
+                echo "${env.SID}"
                 }
             }
         }
