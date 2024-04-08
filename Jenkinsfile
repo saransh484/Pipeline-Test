@@ -59,9 +59,9 @@ pipeline {
         }
 
         stage("Connect to Portainer") {
-          when{
-                expression { return current_status == "opened"}
-            }
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
             steps {
                 sh """
                     curl -X POST \
