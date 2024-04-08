@@ -1,4 +1,4 @@
-// if ( current_status == "opened" && merged == false ){
+if ( current_status == "opened"){
   
   pipeline {
     agent any
@@ -10,7 +10,7 @@
     stages {
         stage('Initialize') {
           when{
-                expression { return current_status == "opened" && merged == false }
+                expression { return current_status == "opened"}
             }
             steps {
                 script {
@@ -44,4 +44,4 @@
     }
 }
 
-// }
+}
