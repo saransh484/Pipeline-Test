@@ -71,8 +71,8 @@ pipeline {
                                      -d '{"Username":"${PORTAINER_USR}", "Password":"${PORTAINER_PSW}"}'
                                 """, returnStdout: true).trim()
                 echo "Response: ${response}"
-                def jwtObj = new groovy.json.JsonSlurper().parseText(response.getContent())
-                echo "${jwtObj}"
+                def jsonObj = readJSON text: response
+                echo "${jsonObj.jwt}"
                 }
             }
         }
