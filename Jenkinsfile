@@ -1,4 +1,4 @@
-if ( current_status == "opened" && merged == false ){
+// if ( current_status == "opened" && merged == false ){
   
   pipeline {
     agent any
@@ -9,11 +9,15 @@ if ( current_status == "opened" && merged == false ){
 
     stages {
         stage('Initialize') {
+          when{
+                expression { return current_status == "opened" && merged == false }
+            }
             steps {
                 script {
-                    // def dockerHome = tool 'myDocker'
-                    // env.PATH = "${dockerHome}/bin:${env.PATH}"
-                    echo 'pass'
+                    def extractedNumber = (title =~ /\d+/).find() ? (title =~ /\d+/).find()[0] : "No number found"
+                    echo "${current_status}"
+                    echo "${merged}"
+                    echo "${extractedNumber}"
                 }
             }
         }
@@ -40,4 +44,4 @@ if ( current_status == "opened" && merged == false ){
     }
 }
 
-}
+// }
