@@ -12,7 +12,8 @@ pipeline{
         script {
           // def dockerHome = tool 'myDocker'
           // env.PATH = "${dockerHome}/bin:${env.PATH}"
-          echo 'pass'
+          echo '${params.current_status}'
+          echo '${merged}'
         }
       }
     }
@@ -25,7 +26,7 @@ pipeline{
 
     stage("Build"){
       steps{
-        sh 'docker build -t test-image:latest .'
+        sh 'docker build -t registry.deploy.flipr.co.in/test-image:latest .'
       }
     }
 
