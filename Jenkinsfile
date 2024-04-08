@@ -63,7 +63,8 @@ pipeline {
           //       expression { return current_status == "opened"}
           //   }
             steps {
-                def response = sh(script: """
+                script{
+                    def response = sh(script: """
                                 curl -X POST \
                                      https://portainer.deploy.flipr.co.in/api/auth \
                                      -H 'Content-Type: application/json' \
@@ -72,6 +73,7 @@ pipeline {
                 echo "Response: ${response}"
                 def jwtObj = new groovy.json.JsonSlurper().parseText(response)
                 echo "${jwtObj}"
+                }
             }
         }
     }
