@@ -59,17 +59,21 @@ pipeline {
         }
 
         stage("Connect to Portainer") {
-          when{
-                expression { return current_status == "opened"}
-            }
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
             steps {
-                sh """
-                    curl -X POST \
-                         https://portainer.deploy.flipr.co.in/api/auth \
-                         -H 'Content-Type: application/json' \
-                         -d '{"Username":"${PORTAINER_USR}", "Password":"${PORTAINER_PSW}"}'
-                """
-                echo 'connected'
+                script{
+                    def response = sh(script: """
+                                curl -X POST \
+                                     https://portainer.deploy.flipr.co.in/api/auth \
+                                     -H 'Content-Type: application/json' \
+                                     -d '{"Username":"${PORTAINER_USR}", "Password":"${PORTAINER_PSW}"}'
+                                """, returnStdout: true).trim()
+                echo "Response: ${response}"
+                def jsonObj = readJSON text: response
+                echo "${jsonObj.jwt}"
+                }
             }
         }
     }
