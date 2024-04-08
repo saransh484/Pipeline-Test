@@ -110,6 +110,25 @@ pipeline {
                 }
             }
         }
+        stage("Deploy Stack") {
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
+            steps {
+                script{
+                    def response = sh(script: """
+                                curl -X GET \
+                                     -H "Authorization: Bearer ${env.JWT}" \
+                                     -H "Content-Type: application/json" \
+                                     --data  '{ "name": "deploy", "stackFileContent": "version: '3.1'\nservices:\n   webserver:\n     image: nginx:alpine\n     container_name: webserver"}' \
+                                     https://portainer.deploy.flipr.co.in/api/stacks/?method=string&type=2&endpointId=2
+
+                                """, 
+                                      returnStdout: true).trim()
+                echo "Response: ${response}"
+                }
+            }
+        }
     }
 }
 
