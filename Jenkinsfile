@@ -14,8 +14,14 @@
             }
             steps {
                 script {
-                    def matcher = branch =~ /\d+/
-                    def extractedNumber = matcher ? matcher.find()[0] : "No number found"
+                    def branchParts = branch.split('-')
+                    def extractedNumber = "No number found"
+
+                    branchParts.each { part ->
+                        if (part.isNumber()) {
+                            extractedNumber = part
+                        }
+                    }
 
                     echo "${current_status}"
                     echo "${merged}"
