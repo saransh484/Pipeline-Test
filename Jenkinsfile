@@ -9,9 +9,9 @@
 
     stages {
         stage('Initialize') {
-          when{
-                expression { return current_status == "opened"}
-            }
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
             steps {
                 script {
                     def branchParts = branch.split('-')
