@@ -63,15 +63,43 @@ pipeline {
           //       expression { return current_status == "opened"}
           //   }
             steps {
-                def response = sh(script: """
+                script{
+                    def response = sh(script: """
                                 curl -X POST \
                                      https://portainer.deploy.flipr.co.in/api/auth \
                                      -H 'Content-Type: application/json' \
                                      -d '{"Username":"${PORTAINER_USR}", "Password":"${PORTAINER_PSW}"}'
                                 """, returnStdout: true).trim()
                 echo "Response: ${response}"
-                def jwtObj = new groovy.json.JsonSlurper().parseText(response)
-                echo "${jwtObj}"
+                def jsonObj = readJSON text: response
+                env.JWT = jsonObj.jwt
+                }
+            }
+        }
+        stage("Get Stacks") {
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
+            steps {
+                script{
+                    def response = sh(script: """
+                                curl -X GET \
+                                     -H "Authorization: Bearer ${env.JWT}" \
+                                     https://portainer.deploy.flipr.co.in/api/stacks
+                                """, 
+                                      returnStdout: true).trim()
+                // echo "Response: ${response}"
+                String existingStackId = ""
+                def jsonObj = readJSON text: response
+                echo "${jsonObj}"
+                    jsonObj.each { stack ->
+                      if(stack.Name == "deploy") {
+                        existingStackId = stack.Id
+                      }
+                    }
+                env.SID = existingStackId
+                echo "${env.SID}"
+                }
             }
         }
     }
