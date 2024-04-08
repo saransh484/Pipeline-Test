@@ -1,4 +1,4 @@
-// if ( current_status == "opened" && merged == false ){
+if ( current_status == "opened"){
   
   pipeline {
     agent any
@@ -44,4 +44,4 @@
     }
 }
 
-// }
+}
