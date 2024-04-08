@@ -72,7 +72,25 @@ pipeline {
                                 """, returnStdout: true).trim()
                 echo "Response: ${response}"
                 def jsonObj = readJSON text: response
-                echo "${jsonObj.jwt}"
+                env.JWT = jsonObj.jwt
+                }
+            }
+        }
+        stage("Get Stacks") {
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
+            steps {
+                script{
+                    def response = sh(script: """
+                                curl -X GET \
+                                     -H "Authorization: Bearer ${env.JWT}" \
+                                     https://portainer.deploy.flipr.co.in/api/stacks
+                                """, 
+                                      returnStdout: true).trim()
+                // echo "Response: ${response}"
+                def jsonObj = readJSON text: response
+                echo "${jsonObj}"
                 }
             }
         }
