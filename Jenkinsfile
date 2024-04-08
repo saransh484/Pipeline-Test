@@ -9,9 +9,9 @@
 
     stages {
         stage('Initialize') {
-          // when{
-          //       expression { return current_status == "opened"}
-          //   }
+          when{
+                expression { return current_status == "opened"}
+            }
             steps {
                 script {
                     def branchParts = branch.split('-')
@@ -44,7 +44,7 @@
                 expression { return current_status == "opened"}
             }
             steps {
-                sh 'docker build -t registry.deploy.flipr.co.in/test-image:latest .'
+                sh "docker build -t registry.deploy.flipr.co.in/test-image:${extractedNumber} ."
             }
         }
 
@@ -55,7 +55,7 @@
             steps {
                 sh 'docker -v'
                 sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
-                sh 'docker push registry.deploy.flipr.co.in/test-image:latest'
+                sh "docker push registry.deploy.flipr.co.in/test-image:${extractedNumber}"
             }
         }
     }
