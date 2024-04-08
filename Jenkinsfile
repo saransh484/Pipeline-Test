@@ -14,7 +14,7 @@
             }
             steps {
                 script {
-                    def extractedNumber = (branch =~ /\d+/).find() ? (branch =~ /\d+/).find()[0] : "No number found"
+                    def extractedNumber = (branch =~ /\d+/).findFirst()?.group() ?: "No number found"
                     echo "${current_status}"
                     echo "${merged}"
                     echo "${extractedNumber}"
