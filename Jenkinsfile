@@ -115,7 +115,7 @@ pipeline {
           //       expression { return current_status == "opened"}
           //   }
             def API_ENDPOINT = "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
-            def JSON_PAYLOAD = '{"name": "deploy", "stackFileContent": "version: '\''3.1'\''\nservices:\n   webserver:\n     image: nginx:alpine\n     container_name: webserver"}'
+            def JSON_PAYLOAD = '{"name": "deploy", "stackFileContent": "version: '3.1'\nservices:\n   webserver:\n     image: registry.deploy.flipr.co.in/test-image:${env.EXTNUM}\n     container_name: webserver"}'
             
             def response
             
