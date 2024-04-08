@@ -1,4 +1,4 @@
-// if ( current_status == "opened" && merged == false ){
+if ( current_status == "opened" && merged == false ){
   
   pipeline {
     agent any
@@ -12,7 +12,7 @@
             steps {
                 script {
                     def extractedNumber = (title =~ /\d+/).find() ? (title =~ /\d+/).find()[0] : "No number found"
-                    echo echo "${current_status}"
+                    echo "${current_status}"
                     echo "${merged}"
                     echo "${extractedNumber}"
                 }
@@ -41,4 +41,4 @@
     }
 }
 
-// }
+}
