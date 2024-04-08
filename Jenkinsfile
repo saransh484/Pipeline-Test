@@ -22,7 +22,7 @@
                             extractedNumber = part
                         }
                     }
-
+                    env.EXTNUM = extractedNumber
                     echo "${current_status}"
                     echo "${merged}"
                     echo "${extractedNumber}"
@@ -44,7 +44,7 @@
                 expression { return current_status == "opened"}
             }
             steps {
-                sh "docker build -t registry.deploy.flipr.co.in/test-image:${extractedNumber} ."
+                sh "docker build -t registry.deploy.flipr.co.in/test-image:${env.EXTNUM} ."
             }
         }
 
@@ -55,7 +55,7 @@
             steps {
                 sh 'docker -v'
                 sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
-                sh "docker push registry.deploy.flipr.co.in/test-image:${extractedNumber}"
+                sh "docker push registry.deploy.flipr.co.in/test-image:${env.EXTNUM}"
             }
         }
     }
