@@ -72,7 +72,63 @@ pipeline {
                                 """, returnStdout: true).trim()
                 echo "Response: ${response}"
                 def jsonObj = readJSON text: response
-                echo "${jsonObj.jwt}"
+                env.JWT = jsonObj.jwt
+                }
+            }
+        }
+        stage("Get Stacks and Delete Old") {
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
+            steps {
+                script{
+                    def response = sh(script: """
+                                curl -X GET \
+                                     -H "Authorization: Bearer ${env.JWT}" \
+                                     https://portainer.deploy.flipr.co.in/api/stacks
+                                """, 
+                                      returnStdout: true).trim()
+                // echo "Response: ${response}"
+                String existingStackId = ""
+                def jsonObj = readJSON text: response
+                echo "${jsonObj}"
+                    jsonObj.each { stack ->
+                      if(stack.Name == "deploy") {
+                        existingStackId = stack.Id
+                      }
+                    }
+                env.SID = existingStackId
+                echo "${env.SID}"
+                    if(existingStackId?.trim()){
+                        def delete = sh(script: """
+                                curl -X DELETE \
+                                     -H "Authorization: Bearer ${env.JWT}" \
+                                     https://portainer.deploy.flipr.co.in/api/stacks/${existingStackId}?endpointId=2
+                                """, 
+                                      returnStdout: true).trim()
+                    }
+                }
+            }
+        }
+        stage("Deploy Stack") {
+          // when{
+          //       expression { return current_status == "opened"}
+          //   }
+            def API_ENDPOINT = "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
+            def JSON_PAYLOAD = '{"name": "deploy", "stackFileContent": "version: '\''3.1'\''\nservices:\n   webserver:\n     image: nginx:alpine\n     container_name: webserver"}'
+            
+            def response
+            
+            steps {
+                script {
+                    response = sh(script: """
+                        curl -X POST \
+                             -H "Authorization: Bearer ${env.JWT}" \
+                             -H "Content-Type: application/json" \
+                             -d '${JSON_PAYLOAD}' \
+                             ${API_ENDPOINT}
+                        """, returnStdout: true).trim()
+                    echo "Response: ${response}"
                 }
             }
         }
