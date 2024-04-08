@@ -114,14 +114,14 @@ pipeline {
           // when{
           //       expression { return current_status == "opened"}
           //   }
-            def API_ENDPOINT = "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
-            def STACK = "version: '3.1'\nservices:\n   webserver:\n     image: registry.deploy.flipr.co.in/test-image:${env.EXTNUM}\n     container_name: webserver"
-            def JSON_PAYLOAD = "{'name': 'deploy', 'stackFileContent': '${STACK}'}"
-            
-            def response
-            
             steps {
                 script {
+
+                    def API_ENDPOINT = "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
+                    def STACK = "version: '3.1'\nservices:\n   webserver:\n     image: registry.deploy.flipr.co.in/test-image:${env.EXTNUM}\n     container_name: webserver"
+                    def JSON_PAYLOAD = "{'name': 'deploy', 'stackFileContent': '${STACK}'}"
+                    def response
+                    
                     response = sh(script: """
                         curl -X POST \
                              -H "Authorization: Bearer ${env.JWT}" \
