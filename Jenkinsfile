@@ -116,18 +116,19 @@ pipeline {
           //   }
             steps {
                 script {
-
-                    def API_ENDPOINT = "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
-                    def STACK = "version: '3.1'\nservices:\n   webserver:\n     image: registry.deploy.flipr.co.in/test-image:${env.EXTNUM}\n     container_name: webserver"
-                    def JSON_PAYLOAD = "{'name': 'deploy', 'stackFileContent': '${STACK}'}"
+                    // def LT = "latest"
+                    // def API_ENDPOINT = "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
+                    // def STACK = "version: '3.1'\nservices:\n   webserver:\n     image: registry.deploy.flipr.co.in/test-image:${LT}\n     container_name: webserver"
+                    // def JSON_PAYLOAD = "{'name': 'deploy', 'stackFileContent': '${STACK}'}"
                     def response
                     
                     response = sh(script: """
                         curl -X POST \
                              -H "Authorization: Bearer ${env.JWT}" \
                              -H "Content-Type: application/json" \
-                             -d '${JSON_PAYLOAD}' \
-                             ${API_ENDPOINT}
+                             -d '{ "name": "deploy", "stackFileContent": "version: '3.1'\nservices:\n   webserver:\n     image: nginx:alpine" }' \
+                             "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
+                        
                         """, returnStdout: true).trim()
                     echo "Response: ${response}"
                 }
