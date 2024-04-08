@@ -11,9 +11,9 @@ if ( current_status == "opened" && merged == false ){
         stage('Initialize') {
             steps {
                 script {
-                    // def dockerHome = tool 'myDocker'
-                    // env.PATH = "${dockerHome}/bin:${env.PATH}"
-                    echo 'pass'
+                    def extractedNumber = (title =~ /\d+/).find() ? (title =~ /\d+/).find()[0] : "No number found"
+                    
+                    echo "${extractedNumber}"
                 }
             }
         }
