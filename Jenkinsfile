@@ -25,7 +25,7 @@ pipeline {
                     echo "${env.GIT_BRANCH}"
                     // echo "${merged}"
                     echo "${extractedNumber}"
-                    env.BUILD_ENV=dev
+                    env.BUILD_ENV="dev"
                 }
             }
         }
