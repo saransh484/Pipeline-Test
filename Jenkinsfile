@@ -99,14 +99,14 @@ pipeline {
                     }
                 env.SID = existingStackId
                 echo "${env.SID}"
-                    if(existingStackId?.trim()){
-                        def delete = sh(script: """
-                                curl -X DELETE \
-                                     -H "Authorization: Bearer ${env.JWT}" \
-                                     https://portainer.deploy.flipr.co.in/api/stacks/${existingStackId}?endpointId=2
-                                """, 
-                                      returnStdout: true).trim()
-                    }
+                    // if(existingStackId?.trim()){
+                    //     def delete = sh(script: """
+                    //             curl -X DELETE \
+                    //                  -H "Authorization: Bearer ${env.JWT}" \
+                    //                  https://portainer.deploy.flipr.co.in/api/stacks/${existingStackId}?endpointId=2
+                    //             """, 
+                    //                   returnStdout: true).trim()
+                    // }
                 }
             }
         }
