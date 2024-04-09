@@ -43,7 +43,7 @@ pipeline {
                 expression { return current_status == "opened"}
             }
             steps {
-                sh "docker build -t registry.deploy.flipr.co.in/test-image:${env.EXTNUM} ."
+                sh "docker build -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
             }
         }
 
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 sh 'docker -v'
                 sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
-                sh "docker push registry.deploy.flipr.co.in/test-image:${env.EXTNUM}"
+                sh "docker push registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM}"
             }
         }
 
@@ -113,9 +113,23 @@ pipeline {
                     def VAR = """
                             "version": "3.1"
                             services:
-                              test-image:
-                                image: registry.deploy.flipr.co.in/test-image:${env.EXTNUM}
-                                container_name: test-image-${env.EXTNUM}
+                              flipr-connect-students:
+                                image: registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM}
+                                container_name: flipr-connect-students-${env.EXTNUM}
+                                labels:
+                                    - "traefik.enable=true"
+                                    - "traefik.http.routers.deploy.rule=Host(`${env.EXTNUM}-student.deploy.flipr.co.in`)"
+                                    - "traefik.http.routers.deploy.entrypoints=websecure"
+                                    - "traefik.http.routers.deploy.tls.certresolver=deploy-resolver"
+                                    - "traefik.http.services.deploy.loadbalancer.server.port=9000"
+                                networks:
+                                    - proxy
+
+                                networks:
+                                proxy:
+                                    name: traefik_default
+                                    external: true
+
                             """
                     
                     def res = sh(script: """ 
