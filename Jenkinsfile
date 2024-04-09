@@ -116,19 +116,28 @@ pipeline {
           //   }
             steps {
                 script {
-                    // def LT = "latest"
-                    // def API_ENDPOINT = "https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2"
-                    // def STACK = "version: '3.1'\nservices:\n   webserver:\n     image: registry.deploy.flipr.co.in/test-image:${LT}\n     container_name: webserver"
-                    // def JSON_PAYLOAD = "{'name': 'deploy', 'stackFileContent': '${STACK}'}"
-                    def response
+
+                    def VAR = "StackFileContent":"version: '3.1'\nservices:\n   nginx:\n     image: registry.deploy.flipr.co.in/nginx:latest\n     container_name: nginx"
                     
-                    response = sh(script: """
-                        curl -X GET \
+                    // def response
+                    
+                    // response = sh(script: """
+                    //     curl -X GET \
+                    //          -H "Authorization: Bearer ${env.JWT}" \
+                    //          -H "Content-Type: application/json" \
+                    //          https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}/file
+                    //     """, returnStdout: true).trim()
+                    // echo "Response: ${response}"
+
+                    def res = sh(script: """ 
+                        curl -X PUT \
                              -H "Authorization: Bearer ${env.JWT}" \
                              -H "Content-Type: application/json" \
-                             https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}/file
+                             -d '{ "pullImage": true, "${VAR}"}' \
+                             https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}?endpointId=2
                         """, returnStdout: true).trim()
-                    echo "Response: ${response}"
+                    
+                    
                 }
             }
         }
