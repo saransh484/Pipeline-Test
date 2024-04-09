@@ -133,7 +133,7 @@ pipeline {
                         curl -X PUT \
                              -H "Authorization: Bearer ${env.JWT}" \
                              -H "Content-Type: application/json" \
-                             -d '{ "pullImage": true, "StackFileContent":"${ groovy.json.JsonOutput.toJson(VAR) }"}' \
+                             -d '{ "pullImage": true, "StackFileContent":${ groovy.json.JsonOutput.toJson(VAR) } }' \
                              https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}?endpointId=2
                         """, returnStdout: true).trim()
                     
