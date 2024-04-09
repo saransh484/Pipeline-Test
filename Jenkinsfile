@@ -126,7 +126,7 @@ pipeline {
                         curl -X GET \
                              -H "Authorization: Bearer ${env.JWT}" \
                              -H "Content-Type: application/json" \
-                             \"https://portainer.deploy.flipr.co.in/api//stacks/${env.SID}/file"
+                             https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}/file
                         """, returnStdout: true).trim()
                     echo "Response: ${response}"
                 }
