@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Initialize') {
           when{
-                expression { return current_status == "opened1"}
+                expression { return current_status == "opened"}
             }
             steps {
                 script {
@@ -31,7 +31,7 @@ pipeline {
 
         stage("Checkout") {
           when{
-                expression { return current_status == "opened1"}
+                expression { return current_status == "opened"}
             }
             steps {
                 checkout scm
@@ -40,7 +40,7 @@ pipeline {
 
         stage("Build") {
           when{
-                expression { return current_status == "opened1"}
+                expression { return current_status == "opened"}
             }
             steps {
                 sh "docker build -t registry.deploy.flipr.co.in/test-image:${env.EXTNUM} ."
@@ -49,7 +49,7 @@ pipeline {
 
         stage("Push To Registry") {
           when{
-                expression { return current_status == "opened1"}
+                expression { return current_status == "opened"}
             }
             steps {
                 sh 'docker -v'
@@ -59,9 +59,9 @@ pipeline {
         }
 
         stage("Connect to Portainer") {
-          // when{
-          //       expression { return current_status == "opened"}
-          //   }
+          when{
+                expression { return current_status == "opened"}
+            }
             steps {
                 script{
                     def response = sh(script: """
@@ -77,9 +77,9 @@ pipeline {
             }
         }
         stage("Get Stacks and Delete Old") {
-          // when{
-          //       expression { return current_status == "opened"}
-          //   }
+          when{
+                expression { return current_status == "opened"}
+            }
             steps {
                 script{
                     def response = sh(script: """
@@ -99,42 +99,25 @@ pipeline {
                     }
                 env.SID = existingStackId
                 echo "${env.SID}"
-                    // if(existingStackId?.trim()){
-                    //     def delete = sh(script: """
-                    //             curl -X DELETE \
-                    //                  -H "Authorization: Bearer ${env.JWT}" \
-                    //                  https://portainer.deploy.flipr.co.in/api/stacks/${existingStackId}?endpointId=2
-                    //             """, 
-                    //                   returnStdout: true).trim()
-                    // }
+
                 }
             }
         }
         stage("GET Stack Content") {
-          // when{
-          //       expression { return current_status == "opened"}
-          //   }
+          when{
+                expression { return current_status == "opened"}
+            }
             steps {
                 script {
 
                     def VAR = """
                             "version": "3.1"
                             services:
-                              nginx:
-                                image: registry.deploy.flipr.co.in/nginx:latest
-                                container_name: nginx
+                              test-image:
+                                image: registry.deploy.flipr.co.in/test-image:${env.EXTNUM}
+                                container_name: test-image-${env.EXTNUM}
                             """
                     
-                    // def response
-                    
-                    // response = sh(script: """
-                    //     curl -X GET \
-                    //          -H "Authorization: Bearer ${env.JWT}" \
-                    //          -H "Content-Type: application/json" \
-                    //          https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}/file
-                    //     """, returnStdout: true).trim()
-                    // echo "Response: ${response}"
-
                     def res = sh(script: """ 
                         curl -X PUT \
                              -H "Authorization: Bearer ${env.JWT}" \
@@ -143,7 +126,8 @@ pipeline {
                              https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}?endpointId=2
                         """, returnStdout: true).trim()
                     
-                    echo "${res}"                }
+                    echo "${res}"                
+                }
             }
         }
     }
