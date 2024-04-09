@@ -25,6 +25,7 @@ pipeline {
                     echo "${env.GIT_BRANCH}"
                     // echo "${merged}"
                     echo "${extractedNumber}"
+                    env.BUILD_ENV=dev
                 }
             }
         }
@@ -43,7 +44,7 @@ pipeline {
         //         expression { return current_status == "opened"}
         //     }
             steps {
-                sh "docker build --build-arg BUILD_ENV=dev -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
+                sh "docker build --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
             }
         }
 
