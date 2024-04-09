@@ -26,6 +26,7 @@ pipeline {
                     // echo "${merged}"
                     echo "${extractedNumber}"
                     env.BUILD_ENV="dev"
+                    echo "${env.BUILD_ENV}"
                 }
             }
         }

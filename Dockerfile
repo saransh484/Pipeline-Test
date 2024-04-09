@@ -12,7 +12,7 @@ COPY yarn.lock ./
 RUN yarn install
 
 COPY ./ ./
-RUN yarn build-${BUILD_ENV}
+RUN yarn build-dev
 
 # Nginx Block
 FROM nginx:1.23-alpine
