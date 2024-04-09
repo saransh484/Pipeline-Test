@@ -111,26 +111,24 @@ pipeline {
                 script {
 
                     def VAR = """
-                            "version": "3.1"
-                            services:
-                              flipr-connect-students:
-                                image: registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM}
-                                container_name: flipr-connect-students-${env.EXTNUM}
-                                labels:
-                                    - "traefik.enable=true"
-                                    - "traefik.http.routers.deploy.rule=Host(`${env.EXTNUM}-student.deploy.flipr.co.in`)"
-                                    - "traefik.http.routers.deploy.entrypoints=websecure"
-                                    - "traefik.http.routers.deploy.tls.certresolver=deploy-resolver"
-                                    - "traefik.http.services.deploy.loadbalancer.server.port=9000"
-                                networks:
-                                    - proxy
+"version": "3.1"
+services:
+  flipr-connect-students:
+    image: registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM}
+    container_name: flipr-connect-students-${env.EXTNUM}
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.deploy.rule=Host(`${env.EXTNUM}-student.deploy.flipr.co.in`)"
+        - "traefik.http.routers.deploy.entrypoints=websecure"
+        - "traefik.http.routers.deploy.tls.certresolver=deploy-resolver"
+    networks:
+        - proxy
 
-                            networks:
-                              proxy:
-                                name: traefik
-                                external: true
-
-                            """
+networks:
+  proxy:
+    name: traefik
+    external: true
+"""
                     
                     def res = sh(script: """ 
                         curl -X PUT \
