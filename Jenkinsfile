@@ -117,7 +117,7 @@ pipeline {
             steps {
                 script {
 
-                    def VAR = "version: 3.1\nservices:\n  nginx:\n    image: registry.deploy.flipr.co.in/nginx:latest\n    container_name: nginx"
+                    def VAR = "version: '3.1'\nservices:\n  nginx:\n    image: registry.deploy.flipr.co.in/nginx:latest\n    container_name: nginx"
                     
                     // def response
                     
