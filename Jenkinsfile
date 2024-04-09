@@ -127,7 +127,7 @@ pipeline {
 
                             networks:
                               proxy:
-                                name: traefik_default
+                                name: traefik
                                 external: true
 
                             """
