@@ -117,7 +117,7 @@ pipeline {
             steps {
                 script {
 
-                    def VAR = "StackFileContent":"version: '3.1'\nservices:\n   nginx:\n     image: registry.deploy.flipr.co.in/nginx:latest\n     container_name: nginx"
+                    def VAR = "version: '3.1'\nservices:\n   nginx:\n     image: registry.deploy.flipr.co.in/nginx:latest\n     container_name: nginx"
                     
                     // def response
                     
@@ -133,12 +133,11 @@ pipeline {
                         curl -X PUT \
                              -H "Authorization: Bearer ${env.JWT}" \
                              -H "Content-Type: application/json" \
-                             -d '{ "pullImage": true, "${VAR}"}' \
+                             -d '{ "pullImage": true, "StackFileContent":"${VAR}"}' \
                              https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}?endpointId=2
                         """, returnStdout: true).trim()
                     
-                    
-                }
+                    echo "${res}"                }
             }
         }
     }
