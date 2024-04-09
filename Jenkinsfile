@@ -121,6 +121,7 @@ services:
         - "traefik.http.routers.deploy.rule=Host(`${env.EXTNUM}-student.deploy.flipr.co.in`)"
         - "traefik.http.routers.deploy.entrypoints=websecure"
         - "traefik.http.routers.deploy.tls.certresolver=deploy-resolver"
+        - "traefik.http.services.deploy.loadbalancer.server.port=3000"
     networks:
         - proxy
 
