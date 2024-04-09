@@ -1,0 +1,21 @@
+query GetUpcomingExternships($isRegistered: Boolean) {
+  getUpcomingExternships(isRegistered: $isRegistered) {
+    category
+    createdAt
+    endDate
+    id
+    isUserRegistered
+    latestRegistered
+    longDescription
+    registrationCount
+    shortDescription
+    startDate
+    tags
+    techStack {
+      icon
+      name
+    }
+    themes
+    title
+  }
+}

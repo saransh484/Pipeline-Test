@@ -1,0 +1,13 @@
+mutation UpdateStudentDetails(
+  $personalDetails: PersonalDetailsInput!
+  $educationDetails: [EducationInput]
+  $projectDetails: [ProjectInput]
+) {
+  updateStudentDetails(
+    personalDetails: $personalDetails
+    educationDetails: $educationDetails
+    projectDetails: $projectDetails
+  ) {
+    status
+  }
+}

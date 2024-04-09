@@ -1,0 +1,7 @@
+mutation CreateToken($firebaseToken: String!) {
+  createToken(firebaseToken: $firebaseToken) {
+    _id
+    name
+    email
+  }
+}

@@ -1,0 +1,45 @@
+name: Build DEV & Upload image to registry v1
+
+on:
+  push:
+    branches: [dev]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: registry.mshosting.in
+  USERNAME: kkmadhpuriya
+  PASSWORD: Admin@1640
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: registry.mshosting.in/${{ github.repository }}-${{github.ref_name}}
+  BUILD_ENV: dev
+
+jobs:
+  push_to_registry:
+    name: Push image to registry
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Getting the repo
+        uses: actions/checkout@v4
+
+      - name: DOCKER LOGIN
+        run: docker login -u ${{ env.USERNAME }} -p ${{ env.PASSWORD }} ${{ env.REGISTRY }}
+
+      - name: Print Docker Images
+        run: docker images ls
+
+      - name: Build Image
+        run: docker build --build-arg BUILD_ENV=${{env.BUILD_ENV}} -t imagetag .
+
+      - name: Add Version Tag & Push
+        run: |
+          docker tag imagetag:latest ${{ env.IMAGE_NAME }}:${{ github.run_number }}
+          docker push ${{ env.IMAGE_NAME }}:${{ github.run_number }}
+
+      - name: Add Latest Tag
+        run: |
+          docker tag imagetag:latest ${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.IMAGE_NAME }}:latest
+
+      - name: Print Docker Images
+        run: docker images ls

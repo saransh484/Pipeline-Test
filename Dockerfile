@@ -1,14 +1,22 @@
-FROM node:20-alpine3.18
+FROM node:20-alpine as nodework
 
-WORKDIR /usr/src/app
+ARG BUILD_ENV=prod
 
-COPY package.json ./package.json
-COPY package-lock.json ./package-lock.json
+RUN echo ${BUILD_ENV}
 
+RUN mkdir -p /usr/app/
+WORKDIR /usr/app
+
+COPY package*.json ./
+COPY yarn.lock ./
 RUN yarn install
 
-COPY . .
+COPY ./ ./
+RUN yarn build-${BUILD_ENV}
 
-EXPOSE 3000
-
-CMD ["yarn", "start"]
+# Nginx Block
+FROM nginx:1.23-alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=nodework /usr/app/build .
+COPY --from=nodework /usr/app/nginx/default.conf /etc/nginx/conf.d

@@ -1,0 +1,33 @@
+query GetUserProfile {
+  getUserProfile {
+    _id
+    name
+    email
+    educationDetails {
+      instituteName
+      batch
+      percentage
+      country
+      state
+    }
+    projectDetails {
+      projectName
+      techStacks {
+        name
+        icon
+      }
+      dateOfCompletion
+      deployedLink
+      projectFile
+    }
+    personalDetails {
+      profilePicture
+      coverPhoto
+      shortBio
+      techStacks {
+        name
+        icon
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+query GetUserRegistration($projectId: String!) {
+  getUserRegistration(projectId: $projectId) {
+    name
+    email
+    teamName
+    team {
+      name
+      email
+    }
+  }
+}

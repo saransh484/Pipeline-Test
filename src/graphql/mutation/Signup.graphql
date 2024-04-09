@@ -1,0 +1,36 @@
+mutation UserSignup($name: String!, $email: String!, $password: String!) {
+  userSignup(name: $name, email: $email, password: $password) {
+    token
+    user {
+      _id
+      name
+      email
+      educationDetails {
+        instituteName
+        batch
+        percentage
+        country
+        state
+      }
+      projectDetails {
+        projectName
+        techStacks {
+          name
+          icon
+        }
+        dateOfCompletion
+        deployedLink
+        projectFile
+      }
+      personalDetails {
+        profilePicture
+        coverPhoto
+        shortBio
+        techStacks {
+          name
+          icon
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+query GetNewProjectsCount($category: Category!) {
+  getNewProjectsCount(category: $category) {
+    count
+  }
+}

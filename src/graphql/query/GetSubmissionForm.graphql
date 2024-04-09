@@ -1,0 +1,16 @@
+query GetSubmissionForm($projectId: String!) {
+  getSubmissionForm(projectId: $projectId) {
+    name
+    required
+    label
+    placeholder
+    inline
+    type
+    minRows
+    options {
+      label
+      value
+      key
+    }
+  }
+}

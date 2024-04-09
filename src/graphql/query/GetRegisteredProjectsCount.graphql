@@ -1,0 +1,5 @@
+query GetRegisteredProjectsCount($category: Category!) {
+  getRegisteredProjectsCount(category: $category) {
+    count
+  }
+}

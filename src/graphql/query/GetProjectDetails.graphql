@@ -1,0 +1,19 @@
+query GetProjectDetails($projectId: String!) {
+  getProjectDetails(projectId: $projectId) {
+    isUserRegistered
+    id
+    title
+    category
+    startDate
+    endDate
+    shortDescription
+    longDescription
+    themes
+    tags
+    techStack {
+      name
+      icon
+    }
+    createdAt
+  }
+}

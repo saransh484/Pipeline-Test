@@ -1,0 +1,21 @@
+query GetUpcomingHackathons($isRegistered: Boolean) {
+  getUpcomingHackathons(isRegistered: $isRegistered) {
+    isUserRegistered
+    id
+    title
+    category
+    startDate
+    endDate
+    shortDescription
+    longDescription
+    themes
+    tags
+    registrationCount
+    latestRegistered
+    techStack {
+      icon
+      name
+    }
+    createdAt
+  }
+}

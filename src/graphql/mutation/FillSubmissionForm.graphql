@@ -1,0 +1,5 @@
+mutation FillSubmissionForm($projectId: String!, $form: SubmittedFormInput!) {
+  fillSubmissionForm(projectId: $projectId, form: $form) {
+    status
+  }
+}

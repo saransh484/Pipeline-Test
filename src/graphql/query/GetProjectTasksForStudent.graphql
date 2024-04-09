@@ -1,0 +1,10 @@
+query GetProjectTasksForStudent($projectId: String!) {
+  getProjectTasksForStudent(projectId: $projectId) {
+    title
+    approxTime
+    id
+    longDescription
+    priority
+    shortDescription
+  }
+}

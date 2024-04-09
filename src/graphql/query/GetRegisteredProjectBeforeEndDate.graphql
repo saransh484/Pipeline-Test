@@ -1,0 +1,21 @@
+query GetRegisteredProjectBeforeEndDate {
+  getRegisteredProjectBeforeEndDate {
+    isUserRegistered
+    id
+    title
+    category
+    startDate
+    endDate
+    shortDescription
+    longDescription
+    themes
+    tags
+    techStack {
+      name
+      icon
+    }
+    createdAt
+    registrationCount
+    latestRegistered
+  }
+}
