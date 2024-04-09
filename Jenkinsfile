@@ -125,10 +125,10 @@ pipeline {
                                 networks:
                                     - proxy
 
-                                networks:
-                                proxy:
-                                    name: traefik_default
-                                    external: true
+                            networks:
+                              proxy:
+                                name: traefik_default
+                                external: true
 
                             """
                     
