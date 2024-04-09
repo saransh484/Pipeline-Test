@@ -44,7 +44,7 @@ pipeline {
         //         expression { return current_status == "opened"}
         //     }
             steps {
-                sh "docker build --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
+                sh "docker build --no-cache --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
             }
         }
 
