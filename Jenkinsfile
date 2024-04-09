@@ -8,12 +8,12 @@ pipeline {
 
     stages {
         stage('Initialize') {
-          when{
-                expression { return current_status == "opened"}
-            }
+        //   when{
+        //         expression { return current_status == "opened"}
+        //     }
             steps {
                 script {
-                    def branchParts = branch.split('-')
+                    def branchParts = env.GIT_BRANCH.split('-')
                     def extractedNumber = 0000
 
                     branchParts.each { part ->
@@ -22,35 +22,35 @@ pipeline {
                         }
                     }
                     env.EXTNUM = extractedNumber
-                    echo "${current_status}"
-                    echo "${merged}"
+                    echo "${env.GIT_BRANCH}"
+                    // echo "${merged}"
                     echo "${extractedNumber}"
                 }
             }
         }
 
         stage("Checkout") {
-          when{
-                expression { return current_status == "opened"}
-            }
+        //   when{
+        //         expression { return current_status == "opened"}
+        //     }
             steps {
                 checkout scm
             }
         }
 
         stage("Build") {
-          when{
-                expression { return current_status == "opened"}
-            }
+        //   when{
+        //         expression { return current_status == "opened"}
+        //     }
             steps {
                 sh "docker build -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
             }
         }
 
         stage("Push To Registry") {
-          when{
-                expression { return current_status == "opened"}
-            }
+        //   when{
+        //         expression { return current_status == "opened"}
+        //     }
             steps {
                 sh 'docker -v'
                 sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
@@ -59,9 +59,9 @@ pipeline {
         }
 
         stage("Connect to Portainer") {
-          when{
-                expression { return current_status == "opened"}
-            }
+        //   when{
+        //         expression { return current_status == "opened"}
+        //     }
             steps {
                 script{
                     def response = sh(script: """
@@ -77,9 +77,9 @@ pipeline {
             }
         }
         stage("Get Stacks and Delete Old") {
-          when{
-                expression { return current_status == "opened"}
-            }
+        //   when{
+        //         expression { return current_status == "opened"}
+        //     }
             steps {
                 script{
                     def response = sh(script: """
@@ -104,9 +104,9 @@ pipeline {
             }
         }
         stage("GET Stack Content") {
-          when{
-                expression { return current_status == "opened"}
-            }
+        //   when{
+        //         expression { return current_status == "opened"}
+        //     }
             steps {
                 script {
 
