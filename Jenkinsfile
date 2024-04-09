@@ -110,7 +110,7 @@ pipeline {
                 }
             }
         }
-        stage("Deploy Stack") {
+        stage("GET Stack Content") {
           // when{
           //       expression { return current_status == "opened"}
           //   }
@@ -123,11 +123,10 @@ pipeline {
                     def response
                     
                     response = sh(script: """
-                        curl -X POST \
+                        curl -X GET \
                              -H "Authorization: Bearer ${env.JWT}" \
                              -H "Content-Type: application/json" \
-                             -d \"{\"name\":\"deploy\",\"stackFileContent\":\"version: '3.1'\nservices:\n   webserver:\n     image: nginx:alpine\"}\" \
-                             \"https://portainer.deploy.flipr.co.in/api/stacks?method=string&type=2&endpointId=2\"
+                             \"https://portainer.deploy.flipr.co.in/api//stacks/${env.SID}/file"
                         """, returnStdout: true).trim()
                     echo "Response: ${response}"
                 }
