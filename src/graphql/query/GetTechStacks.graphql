@@ -1,0 +1,7 @@
+query GetTechStacks {
+  getTechStacks {
+    label
+    icon
+    _id
+  }
+}

@@ -1,15 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import client from "./lib/apollo";
+import { ApolloProvider } from "@apollo/client";
+import { AuthProvider } from "react-auth-kit";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider
+      authType={"cookie"}
+      authName={"_studentAuth"}
+      cookieDomain={window.location.hostname}
+      cookieSecure={window.location.protocol === "https:"}
+    >
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 

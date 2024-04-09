@@ -1,0 +1,17 @@
+mutation RegisterHackathon(
+  $projectId: String!
+  $registrationType: RegistrationType!
+  $registrationFor: Category!
+) {
+  registerHackathon(
+    projectId: $projectId
+    registrationType: $registrationType
+    registrationFor: $registrationFor
+  ) {
+    id
+    name
+    email
+    registrationFor
+    registrationType
+  }
+}

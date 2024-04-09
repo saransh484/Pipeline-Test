@@ -1,0 +1,18 @@
+query GetActiveHackathons {
+  getActiveHackathons {
+    id
+    title
+    category
+    startDate
+    endDate
+    shortDescription
+    longDescription
+    themes
+    tags
+    techStack {
+      name
+      icon
+    }
+    createdAt
+  }
+}

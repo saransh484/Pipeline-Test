@@ -1,0 +1,18 @@
+query GetActiveExternships {
+  getActiveExternships {
+    id
+    title
+    category
+    startDate
+    endDate
+    shortDescription
+    longDescription
+    themes
+    tags
+    techStack {
+      name
+      icon
+    }
+    createdAt
+  }
+}
