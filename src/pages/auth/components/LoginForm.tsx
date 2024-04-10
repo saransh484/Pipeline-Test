@@ -67,8 +67,8 @@ const LoginForm = () => {
     <Fragment>
       <form onSubmit={formHandler.onSubmit(handleLogin)}>
         <Box>
-          <h2 className={classes.heading}>Welcome back!</h2>
-          <p className={classes.description}>Meet the good taste today</p>
+          <h2 className={classes.heading}>Welcome back User!</h2>
+          <p className={classes.description}>Lets Do something something today 🦓</p>
         </Box>
         <Box mt={20}>
           <FInput
