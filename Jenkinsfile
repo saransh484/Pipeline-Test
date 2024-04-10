@@ -22,8 +22,8 @@ pipeline {
                         }
                     }
                     env.EXTNUM = extractedNumber
-                    echo "${current_status}"
-                    echo "${merged}"
+                    // echo "${current_status}"
+                    echo "${env.GIT_BRANCH}"
                     echo "${extractedNumber}"
                     env.BUILD_ENV="dev"
                 }
