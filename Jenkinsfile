@@ -8,12 +8,9 @@ pipeline {
 
     stages {
         stage('Initialize') {
-          when{
-                expression { return current_status == "opened"}
-            }
             steps {
                 script {
-                    def branchParts = branch.split('-')
+                    def branchParts = env.GIT_BRANCH.split('-')
                     def extractedNumber = 0000
 
                     branchParts.each { part ->
@@ -22,35 +19,26 @@ pipeline {
                         }
                     }
                     env.EXTNUM = extractedNumber
-                    echo "${current_status}"
-                    echo "${merged}"
+                    echo "${env.GIT_BRANCH}"
                     echo "${extractedNumber}"
+                    env.BUILD_ENV="dev"
                 }
             }
         }
 
         stage("Checkout") {
-          when{
-                expression { return current_status == "opened"}
-            }
             steps {
                 checkout scm
             }
         }
 
         stage("Build") {
-          when{
-                expression { return current_status == "opened"}
-            }
             steps {
-                sh "docker build -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
+                sh "docker build --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
             }
         }
 
         stage("Push To Registry") {
-          when{
-                expression { return current_status == "opened"}
-            }
             steps {
                 sh 'docker -v'
                 sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
@@ -59,9 +47,6 @@ pipeline {
         }
 
         stage("Connect to Portainer") {
-          when{
-                expression { return current_status == "opened"}
-            }
             steps {
                 script{
                     def response = sh(script: """
@@ -77,9 +62,6 @@ pipeline {
             }
         }
         stage("Get Stacks and Delete Old") {
-          when{
-                expression { return current_status == "opened"}
-            }
             steps {
                 script{
                     def response = sh(script: """
@@ -88,7 +70,6 @@ pipeline {
                                      https://portainer.deploy.flipr.co.in/api/stacks
                                 """, 
                                       returnStdout: true).trim()
-                // echo "Response: ${response}"
                 String existingStackId = ""
                 def jsonObj = readJSON text: response
                 echo "${jsonObj}"
@@ -104,9 +85,6 @@ pipeline {
             }
         }
         stage("GET Stack Content") {
-          when{
-                expression { return current_status == "opened"}
-            }
             steps {
                 script {
 
@@ -121,7 +99,6 @@ services:
         - "traefik.http.routers.deploy.rule=Host(`${env.EXTNUM}-student.deploy.flipr.co.in`)"
         - "traefik.http.routers.deploy.entrypoints=websecure"
         - "traefik.http.routers.deploy.tls.certresolver=deploy-resolver"
-        - "traefik.http.services.deploy.loadbalancer.server.port=3000"
     networks:
         - proxy
 
