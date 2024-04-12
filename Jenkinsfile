@@ -19,8 +19,8 @@ pipeline {
                         }
                     }
                     env.EXTNUM = extractedNumber
-                    def rx  =  sh(script: 'git rev-parse --abbrev-ref HEAD')
-                    echo "${rx}"
+                    
+                    echo "${env.CHANGE_BRANCH}"
                     echo "${env.BRANCH_NAME}"
                     echo "${extractedNumber}"
                     env.BUILD_ENV="dev"
