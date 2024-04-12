@@ -10,7 +10,7 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    def branchParts = env.BRANCH_NAME.split('-')
+                    def branchParts = env.CHANGE_BRANCH.split('-')
                     def extractedNumber = 0000
 
                     branchParts.each { part ->
