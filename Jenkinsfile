@@ -19,6 +19,7 @@ pipeline {
                         }
                     }
                     env.EXTNUM = extractedNumber
+                    sh "git rev-parse --abbrev-ref HEAD"
                     echo "${env.BRANCH_NAME}"
                     echo "${extractedNumber}"
                     env.BUILD_ENV="dev"
