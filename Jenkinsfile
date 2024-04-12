@@ -10,7 +10,7 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    def branchParts = env.GIT_BRANCH.split('-')
+                    def branchParts = env.BRANCH_NAME.split('-')
                     def extractedNumber = 0000
 
                     branchParts.each { part ->
@@ -19,7 +19,7 @@ pipeline {
                         }
                     }
                     env.EXTNUM = extractedNumber
-                    echo "${env.GIT_BRANCH}"
+                    echo "${env.BRANCH_NAME}"
                     echo "${extractedNumber}"
                     env.BUILD_ENV="dev"
                 }
