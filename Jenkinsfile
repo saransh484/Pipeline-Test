@@ -19,7 +19,7 @@ pipeline {
                         }
                     }
                     env.EXTNUM = extractedNumber
-                    def rx  =  sh(script: 'git log -1 --format=%s')
+                    def rx  =  sh(script: 'git rev-parse --abbrev-ref HEAD')
                     echo "${rx}"
                     echo "${env.BRANCH_NAME}"
                     echo "${extractedNumber}"
