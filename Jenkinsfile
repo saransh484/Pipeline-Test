@@ -28,13 +28,13 @@ pipeline {
 
         stage("Build") {
             steps {
-                docker.build(env.BUILD_ENV, env.EXTNUM, SVC)
+                connect_docker.build(env.BUILD_ENV, env.EXTNUM, SVC)
             }
         }
 
         stage("Push To Registry") {
             steps {
-                docker.registry_push($REG_CRED_PSW, $REG_CRED_USR, SVC, env.BUILD_ENV)
+                connect_docker.registry_push($REG_CRED_PSW, $REG_CRED_USR, SVC, env.BUILD_ENV)
             }
         }
         stage("Get Stacks and Delete Old") {
