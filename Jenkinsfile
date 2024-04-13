@@ -15,13 +15,13 @@ pipeline {
                 script {
                     def branchParts = env.CHANGE_BRANCH.split('-')
                     echo "${branchParts}"
-                    def extractedNumber = 0000
+                    def extractedNumber = branchParts[1]
 
-                    branchParts.each { part ->
-                        if (part.isNumber()) {
-                            extractedNumber = part
-                        }
-                    }
+                    // branchParts.each { part ->
+                    //     if (part.isNumber()) {
+                    //         extractedNumber = part
+                    //     }
+                    // }
                     env.EXTNUM = extractedNumber
                     
                     echo "${env.CHANGE_BRANCH}"
