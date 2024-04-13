@@ -32,7 +32,7 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "docker build --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
+                sh "docker build --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-student-${env.EXTNUM}:latest ."
             }
         }
 
