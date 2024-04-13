@@ -57,7 +57,7 @@ pipeline {
         stage("PUT stack") {
             steps {
                 script {
-                    def VAR = """
+def VAR = """
 version: "3.1"
 services:
   ${portainer.pot_basic_template("flipr-connect", "student", env.EXTNUM, "registry.deploy.flipr.co.in", ".deploy.flipr.co.in")}
