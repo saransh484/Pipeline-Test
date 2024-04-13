@@ -5,19 +5,21 @@ pipeline {
         REG_CRED = credentials("reg_cred")
         PORTAINER = credentials("portainer")
     }
-
+    triggers {
+        githubPush()
+    }
     stages {
         stage('Initialize') {
             steps {
                 script {
                     def branchParts = env.BRANCH_NAME.split('-')
-                    def extractedNumber = 0000
+                    def extractedNumber = branchParts[1]
 
-                    branchParts.each { part ->
-                        if (part.isNumber()) {
-                            extractedNumber = part
-                        }
-                    }
+                    // branchParts.each { part ->
+                    //     if (part.isNumber()) {
+                    //         extractedNumber = part
+                    //     }
+                    // }
                     env.EXTNUM = extractedNumber
                     echo "${env.GIT_BRANCH}"
                     echo "${extractedNumber}"
