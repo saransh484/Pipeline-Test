@@ -50,9 +50,7 @@ pipeline {
                 script{
                     def res = portainer.get_stacks("https://portainer.deploy.flipr.co.in", PX )
                     echo "portainer stacks => ${res}"
-                    def sid = portainer.get_stack_id(res, "deploy")
-                    env.SID = sid
-                    echo "${env.SID}"
+                    env.SID = portainer.get_stack_id(res, "deploy")
                 }
             }
         }
