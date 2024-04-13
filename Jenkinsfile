@@ -13,6 +13,7 @@ pipeline {
             steps {
                 script {
                     def branchParts = env.CHANGE_BRANCH.split('-')
+                    echo "${branchParts}"
                     def extractedNumber = 0000
 
                     branchParts.each { part ->
