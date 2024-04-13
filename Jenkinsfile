@@ -9,6 +9,7 @@ pipeline {
         REG_CRED = credentials("reg_cred")
         PX = credentials("ptr_x_api")
         SVC = "student"
+        BUILD_ENV="dev"
     }
     stages {
         stage('Initialize') {
@@ -17,11 +18,6 @@ pipeline {
                     def branchParts = env.CHANGE_BRANCH.split('-')
                     def extractedNumber = branchParts[1]
                     env.EXTNUM = extractedNumber
-                    
-                    echo "${env.CHANGE_BRANCH}"
-                    echo "${env.BRANCH_NAME}"
-                    echo "${extractedNumber}"
-                    env.BUILD_ENV="dev"
                 }
             }
         }
@@ -29,7 +25,7 @@ pipeline {
         stage("Build") {
             steps {
                 script{
-                    connect_docker.build(env.BUILD_ENV, env.EXTNUM, SVC)
+                    connect_docker.build(BUILD_ENV, env.EXTNUM, SVC)
                 }
             }    
         }
