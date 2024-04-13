@@ -2,12 +2,13 @@
 
 pipeline {
     agent any
-
+    triggers {
+        githubPush()
+    }
     environment {
         REG_CRED = credentials("reg_cred")
         PX = credentials("ptr_x_api")
     }
-
     stages {
         stage('Initialize') {
             steps {
