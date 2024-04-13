@@ -37,7 +37,7 @@ pipeline {
         stage("Push To Registry") {
             steps {
                 script{
-                    connect_docker.registry_push(REG_CRED_PSW, REG_CRED_USR, SVC, env.BUILD_ENV)
+                    connect_docker.registry_push(REG_CRED_PSW, REG_CRED_USR, SVC, env.EXTNUM)
                 }
             }
         }
