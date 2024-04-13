@@ -8,20 +8,14 @@ pipeline {
     environment {
         REG_CRED = credentials("reg_cred")
         PX = credentials("ptr_x_api")
+        SVC = "student"
     }
     stages {
         stage('Initialize') {
             steps {
                 script {
                     def branchParts = env.CHANGE_BRANCH.split('-')
-                    echo "${branchParts}"
                     def extractedNumber = branchParts[1]
-
-                    // branchParts.each { part ->
-                    //     if (part.isNumber()) {
-                    //         extractedNumber = part
-                    //     }
-                    // }
                     env.EXTNUM = extractedNumber
                     
                     echo "${env.CHANGE_BRANCH}"
@@ -34,15 +28,13 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "docker build --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-student-${env.EXTNUM}:latest ."
+                docker.build(env.BUILD_ENV, env.EXTNUM, SVC)
             }
         }
 
         stage("Push To Registry") {
             steps {
-                sh 'docker -v'
-                sh 'echo $REG_CRED_PSW | docker login registry.deploy.flipr.co.in -u $REG_CRED_USR --password-stdin'
-                sh "docker push registry.deploy.flipr.co.in/flipr-connect-student-${env.EXTNUM}:latest"
+                docker.registry_push($REG_CRED_PSW, $REG_CRED_USR, SVC, env.BUILD_ENV)
             }
         }
         stage("Get Stacks and Delete Old") {
