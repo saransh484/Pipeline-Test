@@ -1,9 +1,11 @@
+@Library('my_lib') _
+
 pipeline {
     agent any
 
     environment {
         REG_CRED = credentials("reg_cred")
-        PORTAINER = credentials("portainer")
+        PX = credentials("ptr_x_api")
     }
 
     stages {
@@ -28,12 +30,6 @@ pipeline {
             }
         }
 
-        stage("Checkout") {
-            steps {
-                checkout scm
-            }
-        }
-
         stage("Build") {
             steps {
                 sh "docker build --build-arg BUILD_ENV=${env.BUILD_ENV} -t registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM} ."
@@ -47,62 +43,24 @@ pipeline {
                 sh "docker push registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM}"
             }
         }
-
-        stage("Connect to Portainer") {
-            steps {
-                script{
-                    def response = sh(script: """
-                                curl -X POST \
-                                     https://portainer.deploy.flipr.co.in/api/auth \
-                                     -H 'Content-Type: application/json' \
-                                     -d '{"Username":"${PORTAINER_USR}", "Password":"${PORTAINER_PSW}"}'
-                                """, returnStdout: true).trim()
-                echo "Response: ${response}"
-                def jsonObj = readJSON text: response
-                env.JWT = jsonObj.jwt
-                }
-            }
-        }
         stage("Get Stacks and Delete Old") {
             steps {
                 script{
-                    def response = sh(script: """
-                                curl -X GET \
-                                     -H "Authorization: Bearer ${env.JWT}" \
-                                     https://portainer.deploy.flipr.co.in/api/stacks
-                                """, 
-                                      returnStdout: true).trim()
-                String existingStackId = ""
-                def jsonObj = readJSON text: response
-                echo "${jsonObj}"
-                    jsonObj.each { stack ->
-                      if(stack.Name == "deploy") {
-                        existingStackId = stack.Id
-                      }
-                    }
-                env.SID = existingStackId
-                echo "${env.SID}"
-
+                    def res = portainer.get_stacks("https://portainer.deploy.flipr.co.in", PX )
+                    echo "portainer stacks => ${res}"
+                    def sid = portainer.get_stack_id(res, "deploy")
+                    env.SID = sid
+                    echo "${env.SID}"
                 }
             }
         }
-        stage("GET Stack Content") {
+        stage("PUT stack") {
             steps {
                 script {
-
                     def VAR = """
 version: "3.1"
 services:
-  flipr-connect-students:
-    image: registry.deploy.flipr.co.in/flipr-connect-students:${env.EXTNUM}
-    container_name: flipr-connect-students-${env.EXTNUM}
-    labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.deploy.rule=Host(`${env.EXTNUM}-student.deploy.flipr.co.in`)"
-        - "traefik.http.routers.deploy.entrypoints=websecure"
-        - "traefik.http.routers.deploy.tls.certresolver=deploy-resolver"
-    networks:
-        - proxy
+  ${portainer.pot_basic_template("flipr-connect", "student", env.EXTNUM, "registry.deploy.flipr.co.in", ".deploy.flipr.co.in")}
 
 networks:
   proxy:
@@ -110,14 +68,7 @@ networks:
     external: true
 """
                     
-                    def res = sh(script: """ 
-                        curl -X PUT \
-                             -H "Authorization: Bearer ${env.JWT}" \
-                             -H "Content-Type: application/json" \
-                             -d '{ "pullImage": true, "StackFileContent":${ groovy.json.JsonOutput.toJson(VAR) } }' \
-                             https://portainer.deploy.flipr.co.in/api/stacks/${env.SID}?endpointId=2
-                        """, returnStdout: true).trim()
-                    
+                    def res = portainer.put_stack("https://portainer.deploy.flipr.co.in", PX , VAR)
                     echo "${res}"                
                 }
             }
