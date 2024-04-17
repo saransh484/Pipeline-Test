@@ -60,7 +60,7 @@ networks:
     external: true
 """
                     
-                    def res = portainer.put_stack("https://portainer.deploy.flipr.co.in", PX , VAR)
+                    def res = portainer.put_stack("https://portainer.deploy.flipr.co.in", PX , VAR, env.SID)
                     echo "${res}"                
                 }
             }
