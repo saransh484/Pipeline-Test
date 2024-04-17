@@ -37,7 +37,7 @@ pipeline {
                 }
             }
         }
-        stage("Get Stacks and Delete Old") {
+        stage("Get Stacks ID") {
             steps {
                 script{
                     def res = portainer.get_stacks("https://portainer.deploy.flipr.co.in", PX )
